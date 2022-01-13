@@ -2,12 +2,13 @@ package main
 
 import (
 	"fiber-mongo-api/configs"
+	"fiber-mongo-api/routes"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
-	App := fiber.New()
+	app := fiber.New()
 
 	// App.Get("/", func(c *fiber.Ctx) error {
 	// 	return c.JSON(&fiber.Map{"data": "Hello from Fiber & mongoDB"})
@@ -16,5 +17,8 @@ func main() {
 	//run database
 	configs.ConnectDB()
 
-	App.Listen(":6000")
+	//routes
+	routes.UserRoute(app) //add this
+
+	app.Listen(":6000")
 }
