@@ -18,7 +18,7 @@ import (
 var postCollection *mongo.Collection = configs.GetCollection(configs.DB, "posts")
 var validate = validator.New()
 
-func createPost(c *fiber.Ctx) error {
+func CreatePost(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	var post models.Post
 	defer cancel()
@@ -115,4 +115,34 @@ func DeletePost(c *fiber.Ctx) error {
 		responses.PostResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": "User successfully deleted!"}},
 	)
 
+}
+
+func GetAllPost(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	var posts []models.Post
+	defer cancel()
+
+	//objId, _ := primitive.ObjectIDFromHex(post)
+
+	results, err := postCollection.Find(ctx, bson.M{})
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(responses.PostResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+	}
+
+	//reading from the db in an optimal way
+	defer results.Close(ctx)
+	for results.Next(ctx) {
+		var singlePost models.Post
+		if err = results.Decode(&singlePost); err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(responses.PostResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		}
+
+		posts = append(posts, singlePost)
+
+	}
+
+	return c.Status(http.StatusOK).JSON(
+		responses.UserResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": posts}},
+	)
 }

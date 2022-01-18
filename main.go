@@ -18,7 +18,8 @@ func main() {
 	configs.ConnectDB()
 
 	//routes
-	routes.UserRoute(app) //add this
+	routes.UserRoute(app)
+	routes.PostRoute(app)
 
 	app.Listen(":6000")
 }
