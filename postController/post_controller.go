@@ -123,6 +123,8 @@ func GetAllPost(c *fiber.Ctx) error {
 	defer cancel()
 
 	//objId, _ := primitive.ObjectIDFromHex(post)
+	//const query = string{}
+	//if c.Body.endDate
 
 	results, err := postCollection.Find(ctx, bson.M{})
 
