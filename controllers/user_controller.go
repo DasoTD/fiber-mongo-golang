@@ -89,7 +89,7 @@ func EditAUser(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": validationErr.Error()}})
 	}
 
-	update := bson.M{"name": user.Name, "location": user.Location, "title": user.Title}
+	update := bson.M{"name": user.Name, "location": user.Location, "title": user.Title, "password": user.Password}
 
 	result, err := userCollection.UpdateOne(ctx, bson.M{"id": objId}, bson.M{"$set": update})
 
