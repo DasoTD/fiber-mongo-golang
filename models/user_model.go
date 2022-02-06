@@ -9,3 +9,4 @@ type User struct {
 	Title    string             `json:"title,omitempty" validate:"required"`
 	Password string             `json:"password,omitempty" validate:"required"`
 }
+//j mk
